@@ -1,10 +1,13 @@
 export interface TourStep {
   id: string;
-  title: string;
-  content: string;
+  title?: string;
+  content?: string;
+  command?: string;
+  dialog?: string;
+  action?: any;
+  badge?: string;
   target?: string;
   position?: 'top' | 'bottom' | 'left' | 'right';
-  action?: string;
 }
 
 export interface TourContextValue {
@@ -25,6 +28,8 @@ export interface TourContextValue {
   setCompleted: (completed: any[]) => void;
   actions: any;
   script: any;
+  goTo?: (idx: number) => void;
+  finish?: () => void;
 }
 
 export interface TourProviderProps {

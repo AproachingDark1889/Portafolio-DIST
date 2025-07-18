@@ -109,9 +109,41 @@ export const TourProvider = ({ children }: { children: ReactNode }) => {
     return response;
   };
 
+  const goTo = (idx: number) => setCurrentStep(idx);
+  const finish = () => {
+    setCurrentStep(-1);
+    setTourMode(false);
+  };
+
   return (
     <TourContext.Provider
-      value={{ tourMode, currentStep, completed, togglePanel, runCommand, completeStep }}
+      value={{ 
+        tourMode, 
+        currentStep, 
+        completed, 
+        togglePanel, 
+        runCommand, 
+        completeStep,
+        setTourMode,
+        setCurrentStep,
+        setCompleted,
+        actions,
+        script,
+        steps: script || [],
+        current: currentStep,
+        next: () => setCurrentStep(prev => prev + 1),
+        prev: () => setCurrentStep(prev => Math.max(0, prev - 1)),
+        startTour: () => {
+          setTourMode(true);
+          setCurrentStep(0);
+        },
+        endTour: () => {
+          setTourMode(false);
+          setCurrentStep(-1);
+        },
+        goTo,
+        finish
+      }}
     >
       {children}
     </TourContext.Provider>

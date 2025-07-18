@@ -15,6 +15,7 @@ interface ToastData {
   action?: React.ReactNode
   variant?: 'default' | 'destructive' | 'success' | 'warning'
   duration?: number
+  dismiss?: () => void
 }
 
 interface ToastState {
@@ -100,7 +101,9 @@ export function useToast() {
       }
 
       const timeout = setTimeout(() => {
-        toast.dismiss()
+        if (toast.dismiss) {
+          toast.dismiss()
+        }
       }, toast.duration || 5000)
 
       timeouts.push(timeout)
