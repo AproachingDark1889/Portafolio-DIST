@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "ᚠ (Fehu) - Ganado",
+    "message": "Prosperidad material y riqueza. El esfuerzo honesto será recompensado. Administra sabiamente tus recursos.",
+    "element": "Fuego",
+    "meaning": "Riqueza móvil",
+    "keywords": ["prosperidad", "recursos", "éxito material"]
+  },
+  {
+    "id": 2,
+    "name": "ᚢ (Uruz) - Uro Salvaje",
+    "message": "Fuerza primitiva y vitalidad. Es momento de actuar con coraje y determinación. Tu poder interior despierta.",
+    "element": "Tierra",
+    "meaning": "Fuerza bruta",
+    "keywords": ["fuerza", "valor", "vitalidad"]
+  },
+  {
+    "id": 3,
+    "name": "ᚦ (Thurisaz) - Gigante",
+    "message": "Fuerza destructiva que puede ser canalizada. Cuidado con impulsos agresivos. Usa tu poder con sabiduría.",
+    "element": "Fuego",
+    "meaning": "Espina, martillo de Thor",
+    "keywords": ["conflicto", "protección", "fuerza reactiva"]
+  },
+  {
+    "id": 4,
+    "name": "ᚨ (Ansuz) - Dios Odin",
+    "message": "Comunicación divina y sabiduría. Las palabras tienen poder. Escucha los mensajes del universo.",
+    "element": "Aire",
+    "meaning": "Boca, comunicación",
+    "keywords": ["comunicación", "sabiduría", "inspiración"]
+  },
+  {
+    "id": 5,
+    "name": "ᚱ (Raidho) - Viaje",
+    "message": "Movimiento y progreso en el camino correcto. Los viajes físicos o espirituales traerán crecimiento.",
+    "element": "Aire",
+    "meaning": "Cabalgata, viaje",
+    "keywords": ["viaje", "progreso", "movimiento"]
+  },
+  {
+    "id": 6,
+    "name": "ᚲ (Kenaz) - Antorcha",
+    "message": "Iluminación y conocimiento. La sabiduría interior se enciende. Es tiempo de aprender y enseñar.",
+    "element": "Fuego",
+    "meaning": "Antorcha, llama",
+    "keywords": ["conocimiento", "inspiración", "creatividad"]
+  },
+  {
+    "id": 7,
+    "name": "ᚷ (Gebo) - Regalo",
+    "message": "Intercambio equilibrado y generosidad. Da y recibe en igual medida. Las relaciones se fortalecen.",
+    "element": "Aire",
+    "meaning": "Regalo, intercambio",
+    "keywords": ["generosidad", "equilibrio", "intercambio"]
+  },
+  {
+    "id": 8,
+    "name": "ᚹ (Wunjo) - Alegría",
+    "message": "Felicidad y realización. Los esfuerzos pasados dan frutos dulces. Disfruta este momento de armonía.",
+    "element": "Tierra",
+    "meaning": "Alegría, perfección",
+    "keywords": ["alegría", "éxito", "armonía"]
+  },
+  {
+    "id": 9,
+    "name": "ᚺ (Hagalaz) - Granizo",
+    "message": "Disrupciones necesarias para el crecimiento. Las crisis traen oportunidades de transformación.",
+    "element": "Agua",
+    "meaning": "Granizo, destrucción",
+    "keywords": ["crisis", "transformación", "liberación"]
+  },
+  {
+    "id": 10,
+    "name": "ᚾ (Nauthiz) - Necesidad",
+    "message": "Las limitaciones enseñan resistencia. La necesidad es madre de la inventiva. Encuentra soluciones creativas.",
+    "element": "Fuego",
+    "meaning": "Necesidad, constrañimiento",
+    "keywords": ["resistencia", "necesidad", "paciencia"]
+  }
+]

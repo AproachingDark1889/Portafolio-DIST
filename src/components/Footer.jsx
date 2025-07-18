@@ -28,7 +28,7 @@ const Footer = () => {
               whileHover={{ scale: 1.05 }}
               className="text-3xl font-bold text-gradient mb-6"
             >
-              Alex Developer
+              Francisco Developer
             </motion.div>
             
             <p className="text-gray-300 mb-8">
@@ -54,7 +54,7 @@ const Footer = () => {
               <p className="text-gray-400 flex items-center justify-center">
                 <span>Hecho con</span>
                 <Heart className="w-4 h-4 mx-2 text-red-500" />
-                <span>por Alex Developer © 2024</span>
+                <span>por Francisco Emmanuel Developer © 2025</span>
               </p>
             </div>
           </div>

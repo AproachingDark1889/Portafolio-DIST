@@ -1,23 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Palette, Zap } from 'lucide-react';
+import { Terminal, Palette, Zap, Code, FileJson, Database } from 'lucide-react';
+import image from '../images/fondo.jpg';
 
 const About = () => {
   const features = [
     {
-      icon: Code,
-      title: 'Desarrollo Full Stack',
-      description: 'Experiencia en frontend y backend con tecnologías modernas'
-    },
+      icon: Database,
+      title: 'Desarrollo Full-Stack',
+      description: 'Front-end y back-end con JavaScript/TypeScript (React, Tailwind), Python y SQL Server.'
+    },  
     {
       icon: Palette,
-      title: 'Diseño UI/UX',
-      description: 'Creación de interfaces atractivas y experiencias de usuario excepcionales'
+      title: 'Diseño UI/UX Funcional',
+      description: 'Creo interfaces claras, limpias y enfocadas en la acción. Diseño experiencias que no solo se ven bien, sino que mejoran la eficiencia real del usuario en cada clic.'
+    },
+    {
+      icon: FileJson,
+      title: 'Especialista CONTPAQi & Fiscal',
+      description: 'Conocimiento completo de interfaces y dominio de Comercial Premium, Start/Pro, Contabilidad, Bancos, Nóminas y Factura Electrónica.'
     },
     {
       icon: Zap,
-      title: 'Optimización',
-      description: 'Aplicaciones rápidas, eficientes y optimizadas para el rendimiento'
+      title: 'Diagnóstico, Soporte y Resolución Real',
+      description: 'Transformo usuarios en expertos mediante cursos prácticos y guías paso a paso; dejo procesos claros, reproducibles y libres de dependencia técnica'
     }
   ];
 
@@ -33,16 +39,15 @@ const About = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             <span className="text-gradient">Acerca de Mí</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Soy un desarrollador apasionado con más de 5 años de experiencia creando
-            soluciones digitales innovadoras. Me especializo en tecnologías web modernas
-            y siempre busco nuevos desafíos para crecer profesionalmente.
+            Ingeniero de soporte senior y Full-Stack Developer. Domino JavaScript/TypeScript (React, Tailwind), Python (LangChain, Ollama) y SQL Server.
+Cuento con 2 años de experiencia especializada en el ecosistema CONTPAQi (Factura Electrónica, Comercial Premium, Start/Pro, Contabilidad, Bancos y Nóminas), donde he resuelto más de 2 000 tickets de soporte técnico, configuración, capacitación y personalización, con un índice de satisfacción del 96 %.
           </p>
         </motion.div>
 
@@ -51,18 +56,17 @@ const About = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
           >
             <div className="glass-effect rounded-2xl p-8 hover:glow-effect transition-all duration-300">
               <img  
                 className="w-full h-80 object-cover rounded-xl mb-6" 
                 alt="Desarrollador trabajando en código"
-               src="https://images.unsplash.com/photo-1698919585695-546e4a31fc8f" />
+                src={image} 
+              />
               <p className="text-gray-300 leading-relaxed">
-                Mi pasión por la tecnología comenzó desde temprana edad, y desde entonces
-                he estado constantemente aprendiendo y adaptándome a las nuevas tendencias
-                del desarrollo web. Me encanta resolver problemas complejos y crear
-                experiencias digitales que realmente marquen la diferencia.
+                Me apasiona la automatización de procesos y en mis tiempos libres diseño arquitecturas de inteligencia artificial con enfoque innovador.
+Mi lema es claro: convertir datos en decisiones estratégicas.
               </p>
             </div>
           </motion.div>
@@ -71,7 +75,7 @@ const About = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="space-y-6"
           >
             {features.map((feature, index) => (
@@ -80,7 +84,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 whileHover={{ scale: 1.05 }}
                 className="glass-effect rounded-xl p-6 hover:glow-effect transition-all duration-300"
               >

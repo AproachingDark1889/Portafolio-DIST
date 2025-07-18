@@ -33,7 +33,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="text-white">Hola, soy </span>
-            <span className="text-gradient">Alex Developer</span>
+            <span className="text-gradient">Francisco Emmanuel</span>
           </motion.h1>
 
           <motion.p
@@ -42,8 +42,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Desarrollador Full Stack apasionado por crear experiencias digitales increíbles
-            con tecnologías modernas y diseño innovador.
+           Ingeniero de soporte CONTPAQi senior: transformo los flujos contables y fiscales en procesos automáticos, seguros y sin errores, dominando CFDI 4.0, SQL y desarrollo full-stack.
           </motion.p>
 
           <motion.div

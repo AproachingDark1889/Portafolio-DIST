@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ES6"],
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/components/*": ["src/components/*"],
+      "@/stores/*": ["src/stores/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/types/*": ["src/types/*"],
+      "@/utils/*": ["src/utils/*"]
+    },
+    // CONFIGURACIONES ESTRICTAS PARA TRADING - TEMPORALMENTE DESACTIVADAS
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src/stores/**/*.ts", "src/hooks/**/*.ts", "src/context/**/*.tsx", "src/types/**/*.ts", "src/App.tsx", "src/lib/**/*.ts", "src/components/ui/toast.tsx", "src/components/ui/use-toast.ts", "src/components/ui/toaster.tsx"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.backup",
+    "**/_legacy_js/**",
+    "src/components/CommandTerminal.jsx",
+    "src/components/ui/**",
+    "src/data/**",
+    "src/pages/**/*.tsx",
+    "src/components/RobotAssistant.tsx",
+    "src/components/Badges.tsx"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

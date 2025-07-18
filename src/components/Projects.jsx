@@ -6,51 +6,51 @@ import { Button } from '@/components/ui/button';
 const Projects = () => {
   const projects = [
     {
-      title: 'E-Commerce Platform',
-      description: 'Plataforma de comercio electrónico completa con carrito de compras, pagos y gestión de inventario.',
-      image: 'Modern e-commerce website interface with shopping cart and product gallery',
+      title: 'Contpaqi Nóminas',
+      description: 'Robot tipo GPT especializado en CONTPAQi Nóminas, capaz de responder preguntas y guiar procesos de cálculo, timbrado y dispersión de nómina, así como resolver incidencias comunes y optimizar configuraciones de periodos, percepciones y deducciones.',
+      image: 'src/images/Interfaz de Chatbot con Robot Amistoso morado.png',
       technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-FiQYFKIA0-contpaqi-nominas',
       githubUrl: '#'
     },
     {
-      title: 'Task Management App',
-      description: 'Aplicación de gestión de tareas con colaboración en tiempo real y notificaciones push.',
-      image: 'Clean task management dashboard with kanban boards and team collaboration features',
+      title: 'Contpaqi Facatura Electrónica',
+      description: 'Robot tipo GPT especializado en CONTPAQi Factura Electrónica, capaz de explicar y asistir en la emisión, recepción y cancelación de CFDI 4.0, resolver errores de timbrado y configurar catálogos de clientes y productos conforme a requisitos del SAT.',
+      image: 'src/images/Interfaz de Chatbot con Robot Amistoso Verde.png',
       technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'Socket.io'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-it5u2DYzv-contpaqi-factura-electronica',
       githubUrl: '#'
     },
     {
-      title: 'Weather Dashboard',
-      description: 'Dashboard meteorológico interactivo con mapas, gráficos y pronósticos detallados.',
-      image: 'Beautiful weather dashboard with interactive maps and detailed forecasts',
+      title: 'Contpaqi Contabilidad',
+      description: 'Robot tipo GPT especializado en CONTPAQi Contabilidad, capaz de responder preguntas y realizar tareas relacionadas con pólizas, balanzas, contabilidad electrónica y reportes fiscales, garantizando la correcta generación de XML y DIOT.',
+      image: 'src/images/Interfaz de Chat con Robot Amistoso azul.png',
       technologies: ['React', 'D3.js', 'OpenWeather API', 'Tailwind'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-hkjPAVdUN-contpaqi-contabilidad',
       githubUrl: '#'
     },
     {
-      title: 'Social Media Analytics',
-      description: 'Herramienta de análisis de redes sociales con métricas avanzadas y reportes automáticos.',
-      image: 'Social media analytics dashboard with charts and engagement metrics',
+      title: 'Cotpaqi Bancos',
+      description: 'Robot tipo GPT especializado en CONTPAQi Bancos, capaz de conciliar movimientos bancarios, importar estados de cuenta, detectar diferencias y sugerir reglas de automatización para agilizar la conciliación y el control de flujo efectivo.',
+      image: 'src/images/Interfaz de Chatbot con Robot Amistoso blanco.png',
       technologies: ['Vue.js', 'Python', 'FastAPI', 'Chart.js'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-P2OsJeMl1-contpaqi-bancos',
       githubUrl: '#'
     },
     {
-      title: 'Learning Management System',
-      description: 'Sistema de gestión de aprendizaje con cursos interactivos y seguimiento de progreso.',
-      image: 'Modern learning management system with course videos and progress tracking',
+      title: 'Contpaqi Comercial Premium',
+      description: 'Robot tipo GPT especializado en CONTPAQi Comercial Premium, capaz de asesorar sobre inventarios, compras, ventas y cuentas por cobrar / pagar, además de automatizar reportes avanzados y depurar inconsistencias de existencias o pólizas ligadas.',
+      image: 'src/images/Interfaz de Chatbot con Robot Amistoso Gris.png',
       technologies: ['React', 'Express', 'MySQL', 'AWS S3'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-qoudqMUnj-contpaqi-comercial',
       githubUrl: '#'
     },
     {
-      title: 'Cryptocurrency Tracker',
-      description: 'Aplicación para rastrear criptomonedas con alertas de precio y análisis de mercado.',
-      image: 'Cryptocurrency tracking app with real-time price charts and market analysis',
+      title: 'Contpaqi Comercial Start Pro',
+      description: 'Robot tipo GPT especializado en CONTPAQi Comercial Start/Pro, orientado a pymes; responde dudas sobre flujo de operaciones básicas, configuración de folios, listas de precios y generación de documentos comerciales de forma ágil y guiada.',
+      image: 'src/images/Interfaz de Chatbot con Robot Amistoso Rojo.png',
       technologies: ['React Native', 'Redux', 'CoinGecko API', 'Firebase'],
-      liveUrl: '#',
+      liveUrl: 'https://chatgpt.com/g/g-FfEt5t2MU-contpaqi-comercial-start-pro',
       githubUrl: '#'
     }
   ];
@@ -67,13 +67,13 @@ const Projects = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-5xl md:text-6xl font-bold mb-8">
             <span className="text-gradient">Proyectos Destacados</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
             Una selección de mis trabajos más recientes que demuestran mis habilidades
             y pasión por el desarrollo web
           </p>
@@ -86,15 +86,15 @@ const Projects = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               whileHover={{ y: -10 }}
               className="glass-effect rounded-2xl overflow-hidden hover:glow-effect transition-all duration-300"
             >
               <div className="relative overflow-hidden">
                 <img  
-                  className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110" 
+                  className="w-full max-h-61 object-contain object-center transition-transform duration-300 hover:scale-110" 
                   alt={`${project.title} project screenshot`}
-                 src="https://images.unsplash.com/photo-1595872018818-97555653a011" />
+                  src={project.image} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
                   <Button
                     size="sm"
@@ -115,17 +115,17 @@ const Projects = () => {
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-3">
+                <h3 className="text-3xl font-bold text-white mb-4">
                   {project.title}
                 </h3>
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                <p className="text-gray-300 mb-5 text-2xl leading-relaxed">
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-blue-300 text-xs rounded-full border border-blue-500/30"
+                      className="px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-blue-300 text-sm rounded-full border border-blue-500/30"
                     >
                       {tech}
                     </span>

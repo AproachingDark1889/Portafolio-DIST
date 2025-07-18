@@ -7,30 +7,28 @@ const Skills = () => {
       title: 'Frontend',
       skills: [
         { name: 'React', level: 95 },
-        { name: 'TypeScript', level: 90 },
-        { name: 'Next.js', level: 85 },
         { name: 'Tailwind CSS', level: 92 },
-        { name: 'Framer Motion', level: 88 }
+        { name: 'TypeScript', level: 90 },
+        { name: 'Vite', level: 88 },
+        { name: 'Framer Motion', level: 85 }
       ]
     },
     {
-      title: 'Backend',
+      title: 'Backend / IA local',
       skills: [
-        { name: 'Node.js', level: 90 },
-        { name: 'Python', level: 85 },
-        { name: 'PostgreSQL', level: 88 },
-        { name: 'MongoDB', level: 82 },
-        { name: 'GraphQL', level: 80 }
+        { name: 'Python 3.11', level: 90 },
+        { name: 'LangChain', level: 88 },
+        { name: 'Ollama (LLM server)', level: 85 },
+        { name: 'FAISS (vector DB)', level: 82 },
+        { name: 'PyPDFLoader', level: 80 }
       ]
     },
     {
       title: 'Herramientas',
       skills: [
-        { name: 'Git', level: 95 },
-        { name: 'Docker', level: 85 },
-        { name: 'AWS', level: 80 },
-        { name: 'Figma', level: 88 },
-        { name: 'Jest', level: 85 }
+        { name: 'Git / GitHub', level: 95 },
+        { name: 'Docker', level: 88 },
+        { name: 'Markdown + Sphinx (doc)', level: 90 }
       ]
     }
   ];
@@ -47,7 +45,7 @@ const Skills = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -65,7 +63,7 @@ const Skills = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: categoryIndex * 0.2 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="glass-effect rounded-2xl p-8 hover:glow-effect transition-all duration-300"
             >
               <h3 className="text-2xl font-bold text-white mb-6 text-center">
@@ -78,7 +76,7 @@ const Skills = () => {
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: skillIndex * 0.1 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                   >
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-white font-medium">{skill.name}</span>
@@ -90,7 +88,7 @@ const Skills = () => {
                         initial={{ width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
                         transition={{ duration: 1, delay: skillIndex * 0.1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                       />
                     </div>
                   </motion.div>

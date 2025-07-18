@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "El Loco",
+    "message": "Nuevos comienzos llenos de potencial. Confía en tu intuición y da el salto de fe. La aventura te espera.",
+    "suit": "Arcanos Mayores",
+    "element": "Aire",
+    "keywords": ["libertad", "espontaneidad", "nuevo comienzo"]
+  },
+  {
+    "id": 2,
+    "name": "El Mago",
+    "message": "Tienes todas las herramientas necesarias para el éxito. Enfoca tu voluntad y manifiesta tus deseos en la realidad.",
+    "suit": "Arcanos Mayores",
+    "element": "Fuego",
+    "keywords": ["manifestación", "poder personal", "habilidad"]
+  },
+  {
+    "id": 3,
+    "name": "La Sacerdotisa",
+    "message": "La sabiduría viene del interior. Escucha tu intuición y confía en los misterios que aún no comprendes completamente.",
+    "suit": "Arcanos Mayores",
+    "element": "Agua",
+    "keywords": ["intuición", "misterio", "sabiduría interior"]
+  },
+  {
+    "id": 4,
+    "name": "La Emperatriz",
+    "message": "Fertilidad y abundancia rodean tu situación. Es tiempo de crear, nutrir y permitir que las cosas florezcan naturalmente.",
+    "suit": "Arcanos Mayores",
+    "element": "Tierra",
+    "keywords": ["creatividad", "abundancia", "maternidad"]
+  },
+  {
+    "id": 5,
+    "name": "El Emperador",
+    "message": "Estructura y autoridad son necesarias. Toma control de la situación con disciplina y liderazgo responsable.",
+    "suit": "Arcanos Mayores",
+    "element": "Fuego",
+    "keywords": ["autoridad", "estructura", "liderazgo"]
+  },
+  {
+    "id": 6,
+    "name": "El Hierofante",
+    "message": "Busca la guía de tradiciones y enseñanzas establecidas. La sabiduría ancestral iluminará tu camino.",
+    "suit": "Arcanos Mayores",
+    "element": "Tierra",
+    "keywords": ["tradición", "enseñanza", "espiritualidad"]
+  },
+  {
+    "id": 7,
+    "name": "Los Amantes",
+    "message": "Decisiones importantes sobre relaciones y valores. Sigue tu corazón pero también usa la razón para elegir.",
+    "suit": "Arcanos Mayores",
+    "element": "Aire",
+    "keywords": ["amor", "elección", "unión"]
+  },
+  {
+    "id": 8,
+    "name": "El Carro",
+    "message": "Victoria a través de la determinación y el control. Mantén el equilibrio entre fuerzas opuestas para avanzar.",
+    "suit": "Arcanos Mayores",
+    "element": "Agua",
+    "keywords": ["victoria", "determinación", "control"]
+  },
+  {
+    "id": 9,
+    "name": "La Fuerza",
+    "message": "El poder real viene de la compasión y la paciencia. Domina tus impulsos internos con gentileza y firmeza.",
+    "suit": "Arcanos Mayores",
+    "element": "Fuego",
+    "keywords": ["coraje", "compasión", "fuerza interior"]
+  },
+  {
+    "id": 10,
+    "name": "El Ermitaño",
+    "message": "Es tiempo de introspección y búsqueda interior. La soledad te dará las respuestas que buscas.",
+    "suit": "Arcanos Mayores",
+    "element": "Tierra",
+    "keywords": ["introspección", "sabiduría", "guía interior"]
+  }
+]
