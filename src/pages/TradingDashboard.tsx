@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BarChart3, TrendingUp, Settings, Monitor, 
@@ -12,7 +12,7 @@ import ChartPanel from '@/components/trading/ChartPanel';
 import WatchlistSidebar from '@/components/trading/WatchlistSidebar';
 import AlertSystem from '@/components/trading/AlertSystem';
 
-const TradingDashboard = () => {
+const TradingDashboard: React.FC = () => {
   // Core state management
   const [activeCharts, setActiveCharts] = useState([]);
   const [chartPositions, setChartPositions] = useState({});

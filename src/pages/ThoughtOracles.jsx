@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, HelpCircle, RotateCcw, Info } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
@@ -40,6 +40,15 @@ const oracleTypes = [
     description: "Interpretación AI de símbolos oníricos"
   },
 ];
+
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronDown, ChevronUp, Star, Zap, Brain } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Progress } from '../components/ui/progress';
 
 const ThoughtOracles = () => {
   const [selectedOracle, setSelectedOracle] = useState(oracleTypes[0]);
