@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "ESNext",
@@ -26,26 +26,19 @@
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"]
     },
-    // CONFIGURACIONES ESTRICTAS PARA TRADING - TEMPORALMENTE DESACTIVADAS
-    "noImplicitReturns": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitOverride": false,
-    "noPropertyAccessFromIndexSignature": false,
-    "noUncheckedIndexedAccess": false
+    // CONFIGURACIONES ESTRICTAS PARA DOMINIO GLOBAL
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true
   },
-  "include": ["src/stores/**/*.ts", "src/hooks/**/*.ts", "src/context/**/*.tsx", "src/types/**/*.ts", "src/App.tsx", "src/lib/**/*.ts", "src/components/ui/toast.tsx", "src/components/ui/use-toast.ts", "src/components/ui/toaster.tsx"],
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.backup",
-    "**/_legacy_js/**",
-    "src/components/CommandTerminal.jsx",
-    "src/components/ui/**",
-    "src/data/**",
-    "src/pages/**/*.tsx",
-    "src/components/RobotAssistant.tsx",
-    "src/components/Badges.tsx"
+    "**/*.backup"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
