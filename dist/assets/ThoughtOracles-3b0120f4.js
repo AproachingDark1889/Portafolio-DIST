@@ -1,4 +1,4 @@
-import{r as u,j as s,m as y,Z as j,H as v,t as d}from"./index-f85a6274.js";import{d as p,i as N,t as C,r as $,I,R}from"./dreams-71b468ec.js";function g(e){let r=0;for(let a=0;a<e.length;a++)r=e.charCodeAt(a)+((r<<5)-r);return Math.abs(r)}function m(e,r){const a=g(r)%e.length;return e[a]}function f(e,r,a=3){const t=[];for(let o=0;o<a;o++){const i=r+o.toString(),c=m(e,i);if(!t.find(l=>l.id===c.id))t.push(c);else{const l=(g(i)+1)%e.length;t.push(e[l])}}return t}function w(e){const r=m(N,e);return`☯ **${r.name}**
+import{r as u,j as s,m as y,Z as j,H as v,t as d}from"./index-5e49871b.js";import{d as p,i as N,t as C,r as $,I,R}from"./dreams-b627a236.js";function g(e){let r=0;for(let a=0;a<e.length;a++)r=e.charCodeAt(a)+((r<<5)-r);return Math.abs(r)}function m(e,r){const a=g(r)%e.length;return e[a]}function f(e,r,a=3){const t=[];for(let o=0;o<a;o++){const i=r+o.toString(),c=m(e,i);if(!t.find(l=>l.id===c.id))t.push(c);else{const l=(g(i)+1)%e.length;t.push(e[l])}}return t}function w(e){const r=m(N,e);return`☯ **${r.name}**
 ${r.trigram}
 
 **Mensaje del I Ching:**
