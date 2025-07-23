@@ -29,20 +29,13 @@
     "clsx": "^2.0.0",
     "d3": "^7.9.0",
     "framer-motion": "^10.16.4",
-    "gsap": "^3.13.0",
-    "lightweight-charts": "^5.0.8",
     "lucide-react": "^0.292.0",
     "nodemailer": "^7.0.5",
-    "pusher-js": "^8.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "recharts": "^3.1.0",
-    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7",
-    "technicalindicators": "^3.1.0",
-    "zustand": "^5.0.6"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@babel/generator": "^7.27.0",
