@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Shuffle, Download, ClipboardCopy, AlertTriangle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
@@ -11,6 +11,13 @@ import { Button } from "@/components/ui/button";
   • Prevención de repeticiones recientes
   • Validación de datos antes de renderizar
 ──────────────────────────────────────────────────────────────*/
+
+// ── TIPOS ───────────────────────────────────────────────────
+interface Archetype {
+  name: string;
+  description: string;
+  keywords: string[];
+}
 
 // ── 1. FUENTE DE ARQUETIPOS ─────────────────────────────────
 const ARQUETIPOS = [
@@ -220,14 +227,15 @@ const ARQUETIPOS = [
 const RECENT_LIMIT = 3;
 
 // ── 2. UTILIDADES ───────────────────────────────────────────
-const randomArchetype = (recent) => {
+const randomArchetype = (recent: string[]): Archetype => {
   const pool = ARQUETIPOS.filter((a) => !recent.includes(a.name));
   // Si el pool queda vacío (pocos arquetipos), reiniciamos la lista reciente
   const fallbackPool = pool.length ? pool : ARQUETIPOS;
-  return fallbackPool[Math.floor(Math.random() * fallbackPool.length)];
+  const randomIndex = Math.floor(Math.random() * fallbackPool.length);
+  return fallbackPool[randomIndex]!; // Non-null assertion porque fallbackPool siempre tiene elementos
 };
 
-const downloadText = (filename, content) => {
+const downloadText = (filename: string, content: string): void => {
   const blob = new Blob([content], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -239,8 +247,8 @@ const downloadText = (filename, content) => {
 
 // ── 3. COMPONENTE PRINCIPAL ─────────────────────────────────
 const ArchetypeGenerator = () => {
-  const [archetype, setArchetype] = useState(ARQUETIPOS[0]);
-  const [recent, setRecent] = useState([]);
+  const [archetype, setArchetype] = useState<Archetype>(ARQUETIPOS[0]!);
+  const [recent, setRecent] = useState<string[]>([]);
 
   // Generar sin repetir los últimos RECENT_LIMIT
   const generate = useCallback(() => {
