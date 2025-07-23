@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Route, Routes, NavLink, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
-import { Terminal, Brain, MessageSquare, Lightbulb, Settings, Users, BookOpen, Zap, HelpCircle, BarChart3 } from 'lucide-react';
+import { Terminal, Brain, MessageSquare, Lightbulb, Settings, Users, BookOpen, HelpCircle, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TourProvider } from '@/context/TourContext';
 import RobotAssistant from '@/components/RobotAssistant';
@@ -13,7 +13,6 @@ import CommandConsole from '@/pages/CommandConsole';
 import PromptEditorPage from '@/pages/PromptEditorPage';
 import ArchetypeGenerator from '@/pages/ArchetypeGenerator';
 import ThoughtOracles from '@/pages/ThoughtOracles';
-import ProfessionalTradingDashboard from '@/pages/ProfessionalTradingDashboard';
 import SettingsPage from '@/pages/SettingsPage';
 import WelcomePage from '@/pages/WelcomePage';
 import LandingPage from '@/pages/LandingPage';
@@ -23,9 +22,8 @@ const navItems = [
 	{ path: '/dialog', name: 'Dialog Spaces', icon: MessageSquare, component: SymbioticDialog },
 	{ path: '/learning', name: 'Learning Module', icon: BookOpen, component: NonLinearLearning },
 	{ path: '/prompts', name: 'Prompt Editor', icon: Lightbulb, component: PromptEditorPage },
-	{ path: '/archetypes', name: 'Archetypes', icon: Users, component: ArchetypeGenerator },
-	{ path: '/oracles', name: 'Professional Trading', icon: Zap, component: ProfessionalTradingDashboard },
-	{ path: '/settings', name: 'Settings', icon: Settings, component: SettingsPage },
+        { path: '/archetypes', name: 'Archetypes', icon: Users, component: ArchetypeGenerator },
+        { path: '/settings', name: 'Settings', icon: Settings, component: SettingsPage },
 ];
 
 function App() {
@@ -43,9 +41,6 @@ function App() {
 							{navItems.map((item) => (
 								<Route key={item.path} path={item.path} element={<item.component />} />
 							))}
-							{/* Additional routes for professional trading */}
-							<Route path="/professional" element={<ProfessionalTradingDashboard />} />
-							<Route path="/hypertrading" element={<ProfessionalTradingDashboard />} />
 							<Route path="*" element={<LandingPage />} /> {/* Fallback to LandingPage */}
 						</Routes>
 					</main>
