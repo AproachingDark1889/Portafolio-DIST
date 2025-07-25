@@ -6423,7 +6423,11 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
       }
     };
     
-    const handleResetSettings = (): void => {
+const handleResetSettings = (): void => {
+  setSettings(defaultSettings);   // ← aplica todas las opciones arriba listadas
+  localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
+  showToast('Configuración reseteada', 'Todas las configuraciones han sido restauradas');
+};
       Object.entries(defaultSettings).forEach(([k, v]) => onSettingChange(k, v as any));
       localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
       notify("Configuración reseteada", "Todas las configuraciones han sido restauradas");
