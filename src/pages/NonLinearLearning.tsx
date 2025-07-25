@@ -6585,7 +6585,6 @@ const NonLinearLearning = () => {
       </div>
     );
   };
-
   const SettingsView = ({
     onDarkModeChange,
     onGreenModeChange,
@@ -6607,7 +6606,6 @@ const NonLinearLearning = () => {
     
     const [exportData, setExportData] = useState('');
     const [importData, setImportData] = useState('');
-
     useEffect(() => {
       const stored = localStorage.getItem('learningSettings');
       if (stored) {
@@ -6619,7 +6617,6 @@ const NonLinearLearning = () => {
         }
       }
     }, []);
-
     const theme = getTheme(settings);
     
     const handleSettingChange = (key: string, value: any) => {
@@ -7057,6 +7054,20 @@ const NonLinearLearning = () => {
                 <div className="text-slate-400 text-xs">Activados</div>
               </div>
             </div>
+            <button
+              onClick={() => {
+                if (greenMode) {
+                  setGreenMode(false);
+                  setDarkMode(true);
+                } else {
+                  setGreenMode(true);
+                  setDarkMode(false);
+                }
+              }}
+              className={`ml-4 px-3 py-2 rounded-md border ${theme.button}`}
+            >
+              {greenMode ? 'Oscuro' : 'Neón'}
+            </button>
           </div>
 
           {/* Barra de progreso visual */}
