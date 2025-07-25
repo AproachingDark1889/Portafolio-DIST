@@ -16,7 +16,7 @@ module.exports = {
 			},
 		},
 		extend: {
-			colors: {
+                        colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -46,11 +46,17 @@ module.exports = {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))',
 				},
-				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))',
-				},
-			},
+                                card: {
+                                        DEFAULT: 'hsl(var(--card))',
+                                        foreground: 'hsl(var(--card-foreground))',
+                                },
+                                neon: {
+                                        900: '#009900',
+                                        700: '#00cc00',
+                                        500: '#00ff00',
+                                        300: '#66ff66',
+                                },
+                        },
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
