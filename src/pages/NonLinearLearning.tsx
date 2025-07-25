@@ -5414,6 +5414,19 @@ const NonLinearLearning = () => {
   const [currentView, setCurrentView] = useState<ViewType>('fragments');
   const [progressScrollPosition, setProgressScrollPosition] = useState<number>(0);
 
+  useEffect(() => {
+    const stored = localStorage.getItem('learningSettings');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (typeof parsed.darkMode === 'boolean') setDarkMode(parsed.darkMode);
+        if (typeof parsed.greenMode === 'boolean') setGreenMode(parsed.greenMode);
+      } catch {
+        /* ignore parse errors */
+      }
+    }
+  }, []);
+
   const theme = getTheme({ darkMode, greenMode });
 
   // ── OPTIMIZACIONES DE RENDIMIENTO ─────────────────────────────────
@@ -6572,8 +6585,13 @@ const NonLinearLearning = () => {
       </div>
     );
   };
-
-  const SettingsView = () => {
+  const SettingsView = ({
+    onDarkModeChange,
+    onGreenModeChange,
+  }: {
+    onDarkModeChange: (v: boolean) => void;
+    onGreenModeChange: (v: boolean) => void;
+  }) => {
     const [settings, setSettings] = useState<SettingsState>({
       autoSave: true,
       showAnimations: true,
@@ -6588,18 +6606,30 @@ const NonLinearLearning = () => {
     
     const [exportData, setExportData] = useState('');
     const [importData, setImportData] = useState('');
-
+    useEffect(() => {
+      const stored = localStorage.getItem('learningSettings');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          setSettings(prev => ({ ...prev, ...parsed }));
+        } catch {
+          /* ignore */
+        }
+      }
+    }, []);
     const theme = getTheme(settings);
     
     const handleSettingChange = (key: string, value: any) => {
       setSettings(prev => ({
         ...prev,
-        [key]: value
+        [key]: value,
       }));
-      localStorage.setItem('learningSettings', JSON.stringify({
-        ...settings,
-        [key]: value
-      }));
+      if (key === 'darkMode') onDarkModeChange(value);
+      if (key === 'greenMode') onGreenModeChange(value);
+      localStorage.setItem(
+        'learningSettings',
+        JSON.stringify({ ...settings, [key]: value })
+      );
     };
     
     const handleExportData = () => {
@@ -7388,7 +7418,12 @@ const NonLinearLearning = () => {
 
         {currentView === 'network' && <NetworkView />}
         {currentView === 'progress' && <ProgressView />}
-        {currentView === 'settings' && <SettingsView />}
+        {currentView === 'settings' && (
+          <SettingsView
+            onDarkModeChange={setDarkMode}
+            onGreenModeChange={setGreenMode}
+          />
+        )}
       </div>
     </div>
   );
