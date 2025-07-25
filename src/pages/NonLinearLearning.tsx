@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
+import { getTheme, SettingsState } from '../theme';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Zap, Search, ChevronDown, CheckCircle, Lock,
@@ -5406,11 +5407,14 @@ const NonLinearLearning = () => {
   const [fragments, setFragments] = useState<Fragment[]>([]);
   // Estado para alternar entre modo oscuro y modo verde
   const [greenMode, setGreenMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(true);
   const [selectedFragment, setSelectedFragment] = useState<Fragment | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterCategory, setFilterCategory] = useState<string>('Todos');
   const [currentView, setCurrentView] = useState<ViewType>('fragments');
   const [progressScrollPosition, setProgressScrollPosition] = useState<number>(0);
+
+  const theme = getTheme({ darkMode, greenMode });
 
   // ── OPTIMIZACIONES DE RENDIMIENTO ─────────────────────────────────
   
@@ -6570,10 +6574,11 @@ const NonLinearLearning = () => {
   };
 
   const SettingsView = () => {
-    const [settings, setSettings] = useState({
+    const [settings, setSettings] = useState<SettingsState>({
       autoSave: true,
       showAnimations: true,
       darkMode: true,
+      greenMode: false,
       notificationsEnabled: true,
       difficultyFilter: 'all',
       autoAdvance: false,
@@ -6583,6 +6588,8 @@ const NonLinearLearning = () => {
     
     const [exportData, setExportData] = useState('');
     const [importData, setImportData] = useState('');
+
+    const theme = getTheme(settings);
     
     const handleSettingChange = (key: string, value: any) => {
       setSettings(prev => ({
@@ -6672,6 +6679,7 @@ const NonLinearLearning = () => {
         autoSave: true,
         showAnimations: true,
         darkMode: true,
+        greenMode: false,
         notificationsEnabled: true,
         difficultyFilter: 'all',
         autoAdvance: false,
@@ -6684,11 +6692,11 @@ const NonLinearLearning = () => {
     };
     
     return (
-      <div className="h-full bg-slate-800/50 rounded-xl border border-slate-700/50 p-6 overflow-y-auto">
+      <div className={`h-full ${theme.panelBg} rounded-xl border border-slate-700/50 p-6 overflow-y-auto`}>
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Configuraciones de Interfaz */}
           <div>
-            <h3 className="text-white text-xl font-semibold mb-4">Configuración de Interfaz</h3>
+            <h3 className={`${theme.text} text-xl font-semibold mb-4`}>Configuración de Interfaz</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-4 bg-slate-700/50 rounded-lg">
                 <div>
@@ -6741,12 +6749,22 @@ const NonLinearLearning = () => {
                   <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.soundEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
               </div>
+
+              <div className="flex justify-between items-center p-4 bg-slate-700/50 rounded-lg">
+                <label className={`${theme.text} font-medium`}>Tema Cyber-Neón</label>
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-neon-400"
+                  checked={settings.greenMode}
+                  onChange={(e) => handleSettingChange('greenMode', e.target.checked)}
+                />
+              </div>
             </div>
           </div>
           
           {/* Configuraciones de Aprendizaje */}
           <div>
-            <h3 className="text-white text-xl font-semibold mb-4">Configuración de Aprendizaje</h3>
+            <h3 className={`${theme.text} text-xl font-semibold mb-4`}>Configuración de Aprendizaje</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-4 bg-slate-700/50 rounded-lg">
                 <div>
@@ -6933,12 +6951,12 @@ const NonLinearLearning = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className={`min-h-screen ${theme.gradient} ${theme.text}`}>
       {/* Header Fijo Mejorado */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-gradient-to-r from-slate-900/98 via-slate-800/98 to-slate-900/98 border-b border-slate-700/50 shadow-2xl"
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${theme.header} border-b border-slate-700/50 shadow-2xl`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           {/* Fila principal: Logo, navegación y progreso */}
@@ -7006,6 +7024,20 @@ const NonLinearLearning = () => {
                 <div className="text-slate-400 text-xs">Activados</div>
               </div>
             </div>
+            <button
+              onClick={() => {
+                if (greenMode) {
+                  setGreenMode(false);
+                  setDarkMode(true);
+                } else {
+                  setGreenMode(true);
+                  setDarkMode(false);
+                }
+              }}
+              className={`ml-4 px-3 py-2 rounded-md border ${theme.button}`}
+            >
+              {greenMode ? 'Oscuro' : 'Neón'}
+            </button>
           </div>
 
           {/* Barra de progreso visual */}
