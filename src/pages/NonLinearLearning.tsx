@@ -5203,7 +5203,8 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         (settings.difficultyFilter === 'solo1' && fragment.complexity === 1) ||
         (settings.difficultyFilter === 'hasta2' && fragment.complexity <= 2) ||
         (settings.difficultyFilter === 'hasta3' && fragment.complexity <= 3) ||
-        (settings.difficultyFilter === 'hasta4' && fragment.complexity <= 4);
+        (settings.difficultyFilter === 'hasta4' && fragment.complexity <= 4) ||
+        (settings.difficultyFilter === 'hasta5' && fragment.complexity <= 5);
       return matchesSearch && matchesCategory && matchesDifficulty;
     });
   }, [fragments, searchTerm, filterCategory, settings.difficultyFilter]);
@@ -6133,6 +6134,30 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
     const activatedFragments = useMemo(() => fragments.filter(f => f.activated), [fragments]);
     const totalFragments = fragments.length;
     const progressPercentage = useMemo(() => (activatedFragments.length / totalFragments) * 100, [activatedFragments.length, totalFragments]);
+    const achievementFlags = useRef({ first: false, explorer: false, halfway: false, master: false });
+
+    useEffect(() => {
+      if (activatedFragments.length >= 1 && !achievementFlags.current.first) {
+        achievementFlags.current.first = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado tu primer fragmento');
+      }
+      if (activatedFragments.length >= 3 && !achievementFlags.current.explorer) {
+        achievementFlags.current.explorer = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado 3 fragmentos');
+      }
+      if (progressPercentage >= 50 && !achievementFlags.current.halfway) {
+        achievementFlags.current.halfway = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has completado el 50% del contenido');
+      }
+      if (progressPercentage >= 100 && !achievementFlags.current.master) {
+        achievementFlags.current.master = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', '¡Has completado todos los fragmentos!');
+      }
+    }, [activatedFragments.length, progressPercentage, settings.soundEnabled, notify, successSound]);
 
     // Restaurar posición de scroll después de actualizaciones
     useEffect(() => {
@@ -6397,18 +6422,17 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         notify("Progreso reseteado", "Todos los fragmentos han sido desactivados");
       }
     };
+
+    const handleSaveSettings = (): void => {
+      localStorage.setItem('learningSettings', JSON.stringify(settings));
+      notify('Configuración guardada', 'Tus preferencias han sido almacenadas');
+    };
     
-    const handleResetSettings = (): void => {
-      const defaultSettings = {
-        autoSave: true,
-        showAnimations: true,
-        darkMode: true,
-        notificationsEnabled: true,
-        difficultyFilter: 'all',
-        autoAdvance: false,
-        soundEnabled: false,
-        compactMode: false
-      };
+const handleResetSettings = (): void => {
+  setSettings(defaultSettings);   // ← aplica todas las opciones arriba listadas
+  localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
+  showToast('Configuración reseteada', 'Todas las configuraciones han sido restauradas');
+};
       Object.entries(defaultSettings).forEach(([k, v]) => onSettingChange(k, v as any));
       localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
       notify("Configuración reseteada", "Todas las configuraciones han sido restauradas");
@@ -6436,14 +6460,14 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
               
               <div className="flex justify-between items-center p-4 bg-slate-700/50 rounded-lg">
                 <div>
-                  <h4 className="text-white font-medium">Modo Compacto</h4>
-                  <p className="text-gray-400 text-sm">Reducir el espaciado y tamaño de elementos</p>
+                  <h4 className="text-white font-medium">Modo Oscuro</h4>
+                  <p className="text-gray-400 text-sm">Activar interfaz en tonos oscuros</p>
                 </div>
                 <button
-                  onClick={() => handleSettingChange('compactMode', !settings.compactMode)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${settings.compactMode ? 'bg-purple-600' : 'bg-gray-600'}`}
+                  onClick={() => handleSettingChange('darkMode', !settings.darkMode)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${settings.darkMode ? 'bg-purple-600' : 'bg-gray-600'}`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.compactMode ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.darkMode ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
               </div>
               
@@ -6514,11 +6538,11 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
                   className="w-full bg-slate-600 border border-slate-500 text-white py-2 px-3 rounded-lg focus:outline-none focus:border-purple-500"
                 >
                   <option value="all">Todos los niveles</option>
-                  <option value="1">Solo nivel 1</option>
-                  <option value="2">Hasta nivel 2</option>
-                  <option value="3">Hasta nivel 3</option>
-                  <option value="4">Hasta nivel 4</option>
-                  <option value="5">Todos los niveles</option>
+                  <option value="solo1">Solo nivel 1</option>
+                  <option value="hasta2">Hasta nivel 2</option>
+                  <option value="hasta3">Hasta nivel 3</option>
+                  <option value="hasta4">Hasta nivel 4</option>
+                  <option value="hasta5">Hasta nivel 5</option>
                 </select>
               </div>
             </div>
@@ -6528,6 +6552,16 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
           <div>
             <h3 className="text-white text-xl font-semibold mb-4">Gestión de Datos</h3>
             <div className="space-y-4">
+              <div className="p-4 bg-slate-700/50 rounded-lg">
+                <h4 className="text-white font-medium mb-2">💾 Guardar Configuración</h4>
+                <p className="text-gray-400 text-sm mb-3">Almacena manualmente tus ajustes actuales</p>
+                <button
+                  onClick={handleSaveSettings}
+                  className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-white font-medium"
+                >
+                  Guardar Configuración
+                </button>
+              </div>
               
               {/* Exportación Moderna con Descarga Directa */}
               <div className="p-4 bg-slate-700/50 rounded-lg">
