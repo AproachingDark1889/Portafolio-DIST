@@ -38,6 +38,17 @@ interface Fragment {
 
 type ViewType = 'fragments' | 'network' | 'progress' | 'settings';
 
+const defaultSettings = {
+  autoSave: true,
+  showAnimations: true,
+  darkMode: true,
+  notificationsEnabled: true,
+  difficultyFilter: 'all',
+  autoAdvance: false,
+  soundEnabled: false,
+  compactMode: false,
+};
+
 const initialFragments = [
   { 
     id: 'FF1', 
@@ -5039,7 +5050,7 @@ const FragmentCard: React.FC<FragmentCardProps> = ({ fragment, onActivate, onSel
   };
 
   return (
-    <motion.div
+    <MaybeMotion
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -5055,7 +5066,7 @@ const FragmentCard: React.FC<FragmentCardProps> = ({ fragment, onActivate, onSel
       </div>
       <p className="text-xs text-gray-500 mb-2">{fragment.category} - Complejidad: {fragment.complexity}/5</p>
       {isExpanded && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-2 space-y-2">
+        <MaybeMotion initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mt-2 space-y-2">
           <p className="text-sm text-gray-300">{fragment.summary}</p>
           {fragment.prerequisites.length > 0 && (
             <p className="text-xs text-yellow-400">Prerrequisitos: {fragment.prerequisites.join(', ')}</p>
@@ -5067,9 +5078,9 @@ const FragmentCard: React.FC<FragmentCardProps> = ({ fragment, onActivate, onSel
           >
             {fragment.activated ? <><CheckCircle className="w-4 h-4 mr-2 inline" /> Activado</> : <><Zap className="w-4 h-4 mr-2 inline" /> Activar Fragmento</>}
           </button>
-        </motion.div>
+        </MaybeMotion>
       )}
-    </motion.div>
+    </MaybeMotion>
   );
 };
 
@@ -5080,6 +5091,43 @@ const NonLinearLearning = () => {
   const [filterCategory, setFilterCategory] = useState<string>('Todos');
   const [currentView, setCurrentView] = useState<ViewType>('fragments');
   const [progressScrollPosition, setProgressScrollPosition] = useState(0);
+  const [settings, setSettings] = useState(() => {
+    const stored = localStorage.getItem('learningSettings');
+    return stored ? JSON.parse(stored) : defaultSettings;
+  });
+  const handleSettingChange = useCallback(
+    (key: string, value: boolean | string) => {
+      const newSettings = { ...settings, [key]: value };
+      setSettings(newSettings);
+      localStorage.setItem('learningSettings', JSON.stringify(newSettings));
+    },
+    [settings]
+  );
+
+  const successSound = useMemo(() => new Audio('/success.mp3'), []);
+
+  const MaybeMotion: React.FC<motion.HTMLMotionProps<'div'>> = ({ children, ...props }) =>
+    settings.showAnimations ? <motion.div {...props}>{children}</motion.div> : <div {...props}>{children}</div>;
+
+  const notify = useCallback(
+    (title: string, message?: string, variant: ToastVariant = 'default') => {
+      if (settings.notificationsEnabled) {
+        showToast(title, message, variant);
+      }
+    },
+    [settings.notificationsEnabled]
+  );
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', settings.darkMode);
+  }, [settings.darkMode]);
+
+  useEffect(() => {
+    if (settings.autoSave) {
+      localStorage.setItem('learningFragments', JSON.stringify(fragments));
+      localStorage.setItem('learningSettings', JSON.stringify(settings));
+    }
+  }, [fragments, settings, settings.autoSave]);
 
   useEffect(() => {
     // Forzar recarga de todos los fragmentos (temporal)
@@ -5116,20 +5164,25 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         f.id === fragmentId ? { ...f, activated: true } : f
       );
       setFragments(updatedFragments);
+      if (settings.soundEnabled) successSound.play();
       localStorage.setItem('learningFragments', JSON.stringify(updatedFragments));
-      showToast(
+      notify(
         "¡Fragmento Activado!",
         `"${fragmentToActivate.title}" ahora forma parte de tu conocimiento simbiótico.`,
         "default"
       );
+      if (settings.autoAdvance) {
+        const next = updatedFragments.find(f => !f.activated && f.prerequisites.every(p => updatedFragments.find(x => x.id === p)?.activated));
+        if (next) handleActivateFragment(next.id);
+      }
     } else {
-      showToast(
+      notify(
         "Prerrequisitos Incompletos",
         `No se pueden activar "${fragmentToActivate.title}". Completa los fragmentos requeridos primero.`,
         "destructive"
       );
     }
-  }, [fragments, showToast, currentView]);
+  }, [fragments, currentView, settings.autoAdvance, settings.soundEnabled, notify, successSound]);
   
   const handleSelectFragment = useCallback((fragment) => {
     setSelectedFragment(fragment);
@@ -5143,11 +5196,18 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
 
   const filteredFragments = useMemo(() => {
     return fragments.filter(fragment => {
-      const matchesSearch = fragment.title.toLowerCase().includes(searchTerm.toLowerCase()) || fragment.summary.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = fragment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            fragment.summary.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = filterCategory === 'Todos' || fragment.category === filterCategory;
-      return matchesSearch && matchesCategory;
+      const matchesDifficulty = settings.difficultyFilter === 'all' ||
+        (settings.difficultyFilter === 'solo1' && fragment.complexity === 1) ||
+        (settings.difficultyFilter === 'hasta2' && fragment.complexity <= 2) ||
+        (settings.difficultyFilter === 'hasta3' && fragment.complexity <= 3) ||
+        (settings.difficultyFilter === 'hasta4' && fragment.complexity <= 4) ||
+        (settings.difficultyFilter === 'hasta5' && fragment.complexity <= 5);
+      return matchesSearch && matchesCategory && matchesDifficulty;
     });
-  }, [fragments, searchTerm, filterCategory]);
+  }, [fragments, searchTerm, filterCategory, settings.difficultyFilter]);
 
   const NetworkView = () => {
     const [selectedNode, setSelectedNode] = useState<Fragment | null>(null);
@@ -5189,7 +5249,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
           positions[node.id] = { x: node.x, y: node.y };
         });
         localStorage.setItem('nn-positions', JSON.stringify(positions));
-        showToast("Posiciones Guardadas", "Las posiciones de los nodos han sido guardadas.", "default");
+        notify("Posiciones Guardadas", "Las posiciones de los nodos han sido guardadas.", "default");
       }
     }, [layoutMode, currentNodePositions, showToast]);
     
@@ -5280,9 +5340,9 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
           img.src = url;
         }
         
-        showToast("Imagen Exportada", `Red neuronal exportada como ${format.toUpperCase()}`, "default");
+        notify("Imagen Exportada", `Red neuronal exportada como ${format.toUpperCase()}`, "default");
       } catch (error) {
-        showToast("Error de Exportación", "No se pudo exportar la imagen", "destructive");
+        notify("Error de Exportación", "No se pudo exportar la imagen", "destructive");
       } finally {
         setIsExporting(false);
       }
@@ -5323,7 +5383,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
             const node = currentNodePositions.find(n => n.id === selectedNode.id);
             if (node) {
               setDragOffset({ x: 400 - node.x, y: 300 - node.y });
-              showToast("Nodo Enfocado", `Centrando vista en "${node.title}"`, "default");
+              notify("Nodo Enfocado", `Centrando vista en "${node.title}"`, "default");
             }
           } else if (currentNodePositions.length > 0) {
             // Si no hay nodo seleccionado, seleccionar el primero activado o el primero disponible
@@ -5331,7 +5391,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
             const targetNode = firstActivated || currentNodePositions[0];
             setSelectedNode(targetNode);
             setDragOffset({ x: 400 - targetNode.x, y: 300 - targetNode.y });
-            showToast("Navegación", `Enfocando en "${targetNode.title}"`, "default");
+            notify("Navegación", `Enfocando en "${targetNode.title}"`, "default");
           }
           e.preventDefault();
           break;
@@ -5359,7 +5419,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
             if (canActivate) {
               handleActivateFragment(selectedNode.id);
             } else {
-              showToast("No Disponible", "Completa los prerrequisitos primero", "destructive");
+              notify("No Disponible", "Completa los prerrequisitos primero", "destructive");
             }
           } else if (selectedNode && selectedNode.activated) {
             handleSelectFragment(selectedNode);
@@ -5384,7 +5444,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         case 'M':
           setShowMiniMap(prev => {
             const newValue = !prev;
-            showToast("Mini-mapa", newValue ? "Mostrado" : "Oculto", "default");
+            notify("Mini-mapa", newValue ? "Mostrado" : "Oculto", "default");
             return newValue;
           });
           e.preventDefault();
@@ -5393,7 +5453,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         case 'C':
           setIsColorBlindMode(prev => {
             const newValue = !prev;
-            showToast("Modo Visual", newValue ? "Daltónico" : "Normal", "default");
+            notify("Modo Visual", newValue ? "Daltónico" : "Normal", "default");
             return newValue;
           });
           e.preventDefault();
@@ -5402,7 +5462,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         case 'R':
           setZoomLevel(1);
           setDragOffset({ x: 0, y: 0 });
-          showToast("Vista Restablecida", "Zoom y posición reiniciados", "default");
+          notify("Vista Restablecida", "Zoom y posición reiniciados", "default");
           e.preventDefault();
           break;
         case '1':
@@ -5413,7 +5473,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
           const layoutIndex = parseInt(e.key) - 1;
           if (layouts[layoutIndex]) {
             setLayoutMode(layouts[layoutIndex]);
-            showToast("Layout Cambiado", `Modo: ${layouts[layoutIndex]}`, "default");
+            notify("Layout Cambiado", `Modo: ${layouts[layoutIndex]}`, "default");
           }
           e.preventDefault();
           break;
@@ -6074,6 +6134,30 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
     const activatedFragments = useMemo(() => fragments.filter(f => f.activated), [fragments]);
     const totalFragments = fragments.length;
     const progressPercentage = useMemo(() => (activatedFragments.length / totalFragments) * 100, [activatedFragments.length, totalFragments]);
+    const achievementFlags = useRef({ first: false, explorer: false, halfway: false, master: false });
+
+    useEffect(() => {
+      if (activatedFragments.length >= 1 && !achievementFlags.current.first) {
+        achievementFlags.current.first = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado tu primer fragmento');
+      }
+      if (activatedFragments.length >= 3 && !achievementFlags.current.explorer) {
+        achievementFlags.current.explorer = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado 3 fragmentos');
+      }
+      if (progressPercentage >= 50 && !achievementFlags.current.halfway) {
+        achievementFlags.current.halfway = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has completado el 50% del contenido');
+      }
+      if (progressPercentage >= 100 && !achievementFlags.current.master) {
+        achievementFlags.current.master = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', '¡Has completado todos los fragmentos!');
+      }
+    }, [activatedFragments.length, progressPercentage, settings.soundEnabled, notify, successSound]);
 
     // Restaurar posición de scroll después de actualizaciones
     useEffect(() => {
@@ -6253,30 +6337,18 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
     );
   };
 
-  const SettingsView = () => {
-    const [settings, setSettings] = useState({
-      autoSave: true,
-      showAnimations: true,
-      darkMode: true,
-      notificationsEnabled: true,
-      difficultyFilter: 'all',
-      autoAdvance: false,
-      soundEnabled: false,
-      compactMode: false
-    });
+  interface SettingsViewProps {
+    settings: typeof defaultSettings;
+    onSettingChange: (key: string, value: boolean | string) => void;
+  }
+
+  const SettingsView: React.FC<SettingsViewProps> = ({ settings, onSettingChange }) => {
     
     const [exportData, setExportData] = useState('');
     const [importData, setImportData] = useState('');
     
     const handleSettingChange = (key: string, value: boolean | string): void => {
-      setSettings(prev => ({
-        ...prev,
-        [key]: value
-      }));
-      localStorage.setItem('learningSettings', JSON.stringify({
-        ...settings,
-        [key]: value
-      }));
+      onSettingChange(key, value);
     };
     
     const handleExportData = (): void => {
@@ -6287,7 +6359,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         schemaVersion: 1
       };
       setExportData(JSON.stringify(dataToExport, null, 2));
-      showToast("Datos exportados", "Los datos han sido generados en el área de texto");
+      notify("Datos exportados", "Los datos han sido generados en el área de texto");
     };
 
     const handleDownloadProgress = (): void => {
@@ -6298,19 +6370,19 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         schemaVersion: 1,
       };
       downloadJson(exportPayload, `progreso-aprendizaje-${new Date().toISOString().split('T')[0]}.json`);
-      showToast('Exportación lista', 'Se ha descargado tu progreso como archivo JSON');
+      notify('Exportación lista', 'Se ha descargado tu progreso como archivo JSON');
     };
 
     const applyImportedData = (data: { fragments: Fragment[]; settings: typeof settings }): void => {
       if (!data?.fragments || !data?.settings) {
-        showToast('Error de formato', 'El archivo no contiene los campos requeridos (fragments, settings)', 'destructive');
+        notify('Error de formato', 'El archivo no contiene los campos requeridos (fragments, settings)', 'destructive');
         return;
       }
       setFragments(data.fragments);
-      setSettings(data.settings);
+      Object.entries(data.settings).forEach(([k, v]) => onSettingChange(k, v as any));
       localStorage.setItem('learningFragments', JSON.stringify(data.fragments));
       localStorage.setItem('learningSettings', JSON.stringify(data.settings));
-      showToast('Importación exitosa', 'Tu progreso y configuración han sido restaurados');
+      notify('Importación exitosa', 'Tu progreso y configuración han sido restaurados');
     };
 
     const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
@@ -6322,7 +6394,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         applyImportedData(parsed);
         event.target.value = '';
       } catch (err) {
-        showToast('Error de lectura', 'No se pudo leer el archivo JSON. Verifica que sea válido.', 'destructive');
+        notify('Error de lectura', 'No se pudo leer el archivo JSON. Verifica que sea válido.', 'destructive');
       }
     };
     
@@ -6332,14 +6404,14 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         if (parsedData.fragments) {
           setFragments(parsedData.fragments);
           localStorage.setItem('learningFragments', JSON.stringify(parsedData.fragments));
-          showToast("Datos importados", "Los fragmentos han sido restaurados exitosamente");
+          notify("Datos importados", "Los fragmentos han sido restaurados exitosamente");
         }
         if (parsedData.settings) {
-          setSettings(parsedData.settings);
+          Object.entries(parsedData.settings).forEach(([k, v]) => onSettingChange(k, v as any));
           localStorage.setItem('learningSettings', JSON.stringify(parsedData.settings));
         }
       } catch (error) {
-        showToast("Error de importación", "Los datos no tienen un formato válido", "destructive");
+        notify("Error de importación", "Los datos no tienen un formato válido", "destructive");
       }
     };
     
@@ -6347,24 +6419,14 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
       if (confirm("¿Estás seguro de que quieres resetear todo el progreso? Esta acción no se puede deshacer.")) {
         setFragments(initialFragments);
         localStorage.setItem('learningFragments', JSON.stringify(initialFragments));
-        showToast("Progreso reseteado", "Todos los fragmentos han sido desactivados");
+        notify("Progreso reseteado", "Todos los fragmentos han sido desactivados");
       }
     };
     
     const handleResetSettings = (): void => {
-      const defaultSettings = {
-        autoSave: true,
-        showAnimations: true,
-        darkMode: true,
-        notificationsEnabled: true,
-        difficultyFilter: 'all',
-        autoAdvance: false,
-        soundEnabled: false,
-        compactMode: false
-      };
-      setSettings(defaultSettings);
+      Object.entries(defaultSettings).forEach(([k, v]) => onSettingChange(k, v as any));
       localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
-      showToast("Configuración reseteada", "Todas las configuraciones han sido restauradas");
+      notify("Configuración reseteada", "Todas las configuraciones han sido restauradas");
     };
     
     return (
@@ -6467,11 +6529,11 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
                   className="w-full bg-slate-600 border border-slate-500 text-white py-2 px-3 rounded-lg focus:outline-none focus:border-purple-500"
                 >
                   <option value="all">Todos los niveles</option>
-                  <option value="1">Solo nivel 1</option>
-                  <option value="2">Hasta nivel 2</option>
-                  <option value="3">Hasta nivel 3</option>
-                  <option value="4">Hasta nivel 4</option>
-                  <option value="5">Todos los niveles</option>
+                  <option value="solo1">Solo nivel 1</option>
+                  <option value="hasta2">Hasta nivel 2</option>
+                  <option value="hasta3">Hasta nivel 3</option>
+                  <option value="hasta4">Hasta nivel 4</option>
+                  <option value="hasta5">Hasta nivel 5</option>
                 </select>
               </div>
             </div>
@@ -6668,12 +6730,14 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
               </button>
             </div>
             
-            <button 
-              className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 glow-effect px-4 py-2 rounded-lg text-white font-medium"
-              onClick={() => showToast("🚧 ¡Función no implementada!", "", "default")}
+            <button
+              onClick={() => notify("🚧 ¡Función no implementada!", "", "default")}
+              className="relative mt-4 px-5 py-3 rounded-lg overflow-hidden group bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-purple-600 hover:to-fuchsia-600"
             >
-              <Zap className="w-5 h-5 mr-2 inline" />
-              Sugerir Nuevo Fragmento
+              <span className="absolute inset-0 transition-transform duration-500 ease-out transform translate-x-full group-hover:translate-x-0 bg-white/10"></span>
+              <span className="relative z-10 text-white font-semibold tracking-wide flex items-center">
+                <Zap className="mr-2" /> Sugerir Nuevo Fragmento
+              </span>
             </button>
             </div>
           </div>
@@ -6707,7 +6771,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
       </header>
 
       {/* Contenido principal con padding superior para header fijo */}
-      <div className="pt-48 px-6 pb-6">
+      <div className={`pt-48 pb-6 px-6 ${settings.compactMode ? 'space-y-2 p-2 text-sm' : 'space-y-4 p-4 text-base'}`}>
         {currentView === 'fragments' && (
           <div className="flex gap-6 h-[calc(100vh-220px)]">
             {/* Panel de fragmentos mejorado */}
@@ -6731,7 +6795,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
             {/* Panel de contenido ampliado */}
             <div className="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-lg overflow-hidden">
               {selectedFragment ? (
-                <motion.div
+                <MaybeMotion
                   key={selectedFragment.id}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -6947,7 +7011,7 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
                       Activar "{selectedFragment.title}"
                     </button>
                   )}
-                </motion.div>
+                </MaybeMotion>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <BookOpen className="w-24 h-24 mx-auto text-gray-600 mb-4" />
@@ -6961,7 +7025,9 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
 
         {currentView === 'network' && <NetworkView />}
         {currentView === 'progress' && <ProgressView />}
-        {currentView === 'settings' && <SettingsView />}
+        {currentView === 'settings' && (
+          <SettingsView settings={settings} onSettingChange={handleSettingChange} />
+        )}
       </div>
     </div>
   );
