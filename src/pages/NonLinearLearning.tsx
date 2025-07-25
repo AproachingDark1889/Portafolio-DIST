@@ -5203,7 +5203,8 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
         (settings.difficultyFilter === 'solo1' && fragment.complexity === 1) ||
         (settings.difficultyFilter === 'hasta2' && fragment.complexity <= 2) ||
         (settings.difficultyFilter === 'hasta3' && fragment.complexity <= 3) ||
-        (settings.difficultyFilter === 'hasta4' && fragment.complexity <= 4);
+        (settings.difficultyFilter === 'hasta4' && fragment.complexity <= 4) ||
+        (settings.difficultyFilter === 'hasta5' && fragment.complexity <= 5);
       return matchesSearch && matchesCategory && matchesDifficulty;
     });
   }, [fragments, searchTerm, filterCategory, settings.difficultyFilter]);
@@ -6133,6 +6134,30 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
     const activatedFragments = useMemo(() => fragments.filter(f => f.activated), [fragments]);
     const totalFragments = fragments.length;
     const progressPercentage = useMemo(() => (activatedFragments.length / totalFragments) * 100, [activatedFragments.length, totalFragments]);
+    const achievementFlags = useRef({ first: false, explorer: false, halfway: false, master: false });
+
+    useEffect(() => {
+      if (activatedFragments.length >= 1 && !achievementFlags.current.first) {
+        achievementFlags.current.first = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado tu primer fragmento');
+      }
+      if (activatedFragments.length >= 3 && !achievementFlags.current.explorer) {
+        achievementFlags.current.explorer = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has activado 3 fragmentos');
+      }
+      if (progressPercentage >= 50 && !achievementFlags.current.halfway) {
+        achievementFlags.current.halfway = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', 'Has completado el 50% del contenido');
+      }
+      if (progressPercentage >= 100 && !achievementFlags.current.master) {
+        achievementFlags.current.master = true;
+        if (settings.soundEnabled) successSound.play();
+        notify('Logro desbloqueado', '¡Has completado todos los fragmentos!');
+      }
+    }, [activatedFragments.length, progressPercentage, settings.soundEnabled, notify, successSound]);
 
     // Restaurar posición de scroll después de actualizaciones
     useEffect(() => {
@@ -6399,16 +6424,6 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
     };
     
     const handleResetSettings = (): void => {
-      const defaultSettings = {
-        autoSave: true,
-        showAnimations: true,
-        darkMode: true,
-        notificationsEnabled: true,
-        difficultyFilter: 'all',
-        autoAdvance: false,
-        soundEnabled: false,
-        compactMode: false
-      };
       Object.entries(defaultSettings).forEach(([k, v]) => onSettingChange(k, v as any));
       localStorage.setItem('learningSettings', JSON.stringify(defaultSettings));
       notify("Configuración reseteada", "Todas las configuraciones han sido restauradas");
@@ -6514,11 +6529,11 @@ const handleActivateFragment = useCallback((fragmentId: string): void => {
                   className="w-full bg-slate-600 border border-slate-500 text-white py-2 px-3 rounded-lg focus:outline-none focus:border-purple-500"
                 >
                   <option value="all">Todos los niveles</option>
-                  <option value="1">Solo nivel 1</option>
-                  <option value="2">Hasta nivel 2</option>
-                  <option value="3">Hasta nivel 3</option>
-                  <option value="4">Hasta nivel 4</option>
-                  <option value="5">Todos los niveles</option>
+                  <option value="solo1">Solo nivel 1</option>
+                  <option value="hasta2">Hasta nivel 2</option>
+                  <option value="hasta3">Hasta nivel 3</option>
+                  <option value="hasta4">Hasta nivel 4</option>
+                  <option value="hasta5">Hasta nivel 5</option>
                 </select>
               </div>
             </div>
